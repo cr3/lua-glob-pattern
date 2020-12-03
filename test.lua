@@ -28,12 +28,21 @@ assert(p == '^%\\abc\\$')
 
 -- basic * and ?
 local p = globtopattern("abc.*")
-assert(p == '^abc%..*$')
+assert(p == '^abc%.[^/]*$')
 assert(("abc.txt"):match(p))
 assert(("abc."):match(p))
 assert(not("abc"):match(p))
 local p = globtopattern("??.txt")
 assert(p == '^..%.txt$')
+
+-- * vs **
+local p = globtopattern("/a/*/c")
+assert(p == '^%/a%/[^/]*%/c$')
+assert(("/a/b/c"):match(p))
+assert(not ("/a/b/b/c"):match(p))
+local p = globtopattern("/a/**/c")
+assert(p == '^%/a%/.*%/c$')
+assert(("/a/b/b/c"):match(p))
 
 -- character sets
 -- trivial

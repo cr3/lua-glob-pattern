@@ -98,7 +98,12 @@ function M.globtopattern(g)
     elseif c == '?' then
       p = p .. '.'
     elseif c == '*' then
-      p = p .. '.*'
+      if g:sub(i + 1,i + 1) == '*' then
+        i = i + 1
+        p = p .. '.*'
+      else
+        p = p .. '[^/]*'
+      end
     elseif c == '[' then
       if not charset() then break end
     elseif c == '\\' then
